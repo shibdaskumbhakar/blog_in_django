@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block link %}
+<script src="https://cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
+
+{%endblock%}
+{% block title %} {% endblock %}
+
+
+{% block content %}
+
+<div>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="exampleFormControlInput1">Title</label>
+            <input type="text" name="title" value="{{ object.title }}" class="form-control" placeholder="Title">
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Description</label>
+            <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3"
+                placeholder="Description">{{ object.description }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlFile1">Image</label>
+            <input type="file" name="image" class="form-control-file" id="exampleFormControlFile1">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+
+
+<script>
+    CKEDITOR.replace('description');
+</script>
+{% endblock %}

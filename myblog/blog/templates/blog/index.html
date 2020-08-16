@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {% endblock %}
+{% block css %}
+<style>
+    .card-img {
+        max-height: 100%;
+        max-width: 100%;
+    }
+
+    .image {
+        height: 250px;
+        width: 250px;
+    }
+
+    .bloglist {
+
+        margin-top: 10px;
+    }
+
+    .description {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+</style>
+{%endblock%}
+
+{% block content %}
+
+<div class="container bloglist">
+    {% for obj in blog %}
+
+    <div class="card mb-3" style="max-width: 740px;">
+        <div class="row no-gutters">
+            <div class="col-md-4 image">
+                <img src="{{obj.image.url}}" class="card-img" alt="">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ obj.title }}</h5>
+                    <p class="card-text description">{{ obj.description }}</p>
+                    <p class="card-text"><small class="text-muted">published date: {{obj.timestamp}} </small></p>
+                    <a href="{{ obj.get_absolute_url }}" class="btn btn-primary">Read More</a>
+                    <hr>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+
+
+</div>
+
+
+
+
+
+{% endblock %}

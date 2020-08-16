@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {% endblock %}
+
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 m-auto">
+            <img src="{{object.image.url}}" class="card-img-top" alt="">
+        </div>
+        <div class="col-md-7">
+            <h5 class="card-title">{{object.title}}</h5>
+            <p class="card-text">{{object.description}}</p>
+            <p class="card-text"><small class="text-muted">published date: {{object.timestamp}} </small></p>
+
+            <div>
+
+                <div class="row">
+                    <div class="col-md-4">
+
+                        {% if user.is_authenticated %}
+                        {% if liked %}
+                        <h5>Liked({{likecount}})</h5>
+                        {% else %}
+                        <form class="like" action="{% url 'blog:like'  %}" method="POST">
+                            {% csrf_token%}
+                            <input type="hidden" name="blogid" value="{{ object.id }}">
+                            <input type="hidden" name="title" value="{{ object.title }}">
+
+                            <button class="primary-btn btn-success">Like</button>
+                        </form>
+                        {% endif %}
+                        {% else%}
+                        <h5>Like({{likecount}})</h5>
+                        {% endif %}
+
+                    </div>
+                    <div class="col-md-4">
+                        {% if user.is_authenticated %}
+                        {% if Dislike %}
+                        <h5>Disliked({{dislikecount}})</h5>
+                        {% else %}
+                        <form class="dislike" action="{% url 'blog:dislike'  %}" method="POST">
+                            {% csrf_token%}
+                            <input type="hidden" name="blogid" value="{{ object.id }}">
+                            <input type="hidden" name="title" value="{{ object.title }}">
+
+                            <button class="primary-btn btn-danger">Dislike</button>
+                        </form>
+                        {% endif %}
+                        {% else%}
+                        <h5>Disliked({{dislikecount}})</h5>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <hr>
+                <div class="">
+
+                    <h4>Comment</h4>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-5">
+                                {% if user.is_authenticated %}
+                                <form class="comment" action="{% url 'blog:comment'  %}" method="POST">
+                                    {% csrf_token%}
+                                    <input type="hidden" name="blogid" value="{{ object.id }}">
+                                    <div class="form-group">
+                                        <label for="">comment</label>
+                                        <input type="text" name="comment" class="form-control" id=""
+                                            aria-describedby="">
+
+                                    </div>
+
+
+                                    <button class="primary-btn btn-info">Add Comment</button>
+                                </form>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-7">
+                                {% for obj in comment %}
+                                <h5>{{obj.user}} : {{ obj.comment }} </h5>
+
+                                <hr>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+        <hr>
+
+    </div>
+</div>
+
+
+
+
+
+<script>
+    var returnForm = $(".like")
+    returnForm.submit(function (event) {
+        event.preventDefault();
+
+        var Form = $(this)
+        var Endpoint = Form.attr("action");
+        var Method = Form.attr("method");
+        var Data = Form.serialize();
+
+        $.ajax({
+            url: Endpoint,
+            method: Method,
+            data: Data,
+            success: function (data) {
+
+                location.reload(true);
+            },
+            error: function (errorData) {
+
+
+            }
+        })
+
+
+
+
+    })
+
+
+    var returnForm = $(".dislike")
+    returnForm.submit(function (event) {
+        event.preventDefault();
+
+        var Form = $(this)
+        var Endpoint = Form.attr("action");
+        var Method = Form.attr("method");
+        var Data = Form.serialize();
+
+        $.ajax({
+            url: Endpoint,
+            method: Method,
+            data: Data,
+            success: function (data) {
+
+                location.reload(true);
+            },
+            error: function (errorData) {
+
+
+            }
+        })
+
+
+
+    })
+
+
+
+    var returnForm = $(".comment")
+    returnForm.submit(function (event) {
+        event.preventDefault();
+
+        var Form = $(this)
+        var Endpoint = Form.attr("action");
+        var Method = Form.attr("method");
+        var Data = Form.serialize();
+
+        $.ajax({
+            url: Endpoint,
+            method: Method,
+            data: Data,
+            success: function (data) {
+
+                location.reload(true);
+            },
+            error: function (errorData) {
+
+
+            }
+        })
+
+
+
+    })
+</script>
+{% endblock %}

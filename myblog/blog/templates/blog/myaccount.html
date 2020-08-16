@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block link %}
+<script src="https://cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
+{%endblock%}
+{% block title %} {% endblock %}
+
+{% block css %}
+<style>
+    .sidenav {
+        padding-top: 50px;
+    }
+
+    .card-img {
+        max-height: 100%;
+        max-width: 100%;
+    }
+
+    .image {
+        height: 150px;
+        width: 150px;
+    }
+
+    .bloglist {
+
+        margin-top: 10px;
+        margin-bottom: 50px;
+    }
+
+    .addblog {
+        margin-bottom: 50px;
+    }
+</style>
+{%endblock%}
+{% block content %}
+
+
+<div class="sidenav">
+    <div class="row">
+        <div class="col-2">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
+                    aria-controls="v-pills-home" aria-selected="true">My All Blog</a>
+                <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
+                    aria-controls="v-pills-profile" aria-selected="false">Add New Blog</a>
+
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                    aria-labelledby="v-pills-home-tab">
+
+                    <div class="container bloglist">
+                        {% for obj in myblog %}
+
+                        <div class="card mb-3" style="max-width: 740px;">
+                            <div class="row no-gutters">
+                                <div class="col-md-4 image">
+                                    <img src="{{obj.image.url}}" class="card-img" alt="">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ obj.title }}</h5>
+                                        <p class="card-text description">{{ obj.description }}</p>
+                                        <p class="card-text"><small class="text-muted">Last updated 3 mins
+                                                ago</small></p>
+                                        <a href="{{ obj.get_absolute_url }}" class="btn btn-primary">Read More</a>
+                                        <a href="{% url 'blog:updaet' slug=obj.slug %}" class="btn btn-primary">Edit
+                                            Post</a>
+
+                                        <a href="{% url 'blog:delete' slug=obj.slug %}"
+                                            class="btn btn-primary">Delete</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                    <div class="addblog">
+                        <form action="myaccount/addblog" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="exampleFormControlInput1">Title</label>
+                                <input type="text" name="title" class="form-control" placeholder="Title">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Description</label>
+                                <textarea class="form-control" name="description" id="exampleFormControlTextarea1"
+                                    rows="3" placeholder="Description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlFile1">Image</label>
+                                <input type="file" name="image" class="form-control-file" id="exampleFormControlFile1">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    CKEDITOR.replace('description');
+</script>
+{% endblock %}
